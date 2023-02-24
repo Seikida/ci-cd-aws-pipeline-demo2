@@ -35,7 +35,6 @@ export class CiCdAwsPipelineDemo2Stack extends cdk.Stack {
     });
 
 
-    /*
     // Create a Key Pair to be used with this EC2 Instance
     // Temporarily disabled since `cdk-ec2-key-pair` is not yet CDK v2 compatible
     // const key = new KeyPair(this, 'KeyPair', {
@@ -54,6 +53,7 @@ export class CiCdAwsPipelineDemo2Stack extends cdk.Stack {
       }]
     });
 
+    /*
 
     // Allow SSH (TCP Port 22) access from anywhere
     const securityGroup = new ec2.SecurityGroup(this, 'SecurityGroup', {
