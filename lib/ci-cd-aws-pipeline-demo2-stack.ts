@@ -21,6 +21,24 @@ export class CiCdAwsPipelineDemo2Stack extends cdk.Stack {
     // });
 
 
+    function cdkToolkitLookupRoleArn(stack: cdk.Stack, cdkToolkitQualifier?: string): string {
+      const synthesizer = stack.synthesizer
+      if (synthesizer instanceof cdk.DefaultStackSynthesizer) {
+        const qualifier = (
+          cdkToolkitQualifier
+          ?? stack.node.tryGetContext(cdk.BOOTSTRAP_QUALIFIER_CONTEXT)
+          ?? cdk.DefaultStackSynthesizer.DEFAULT_QUALIFIER
+        )
+        let s = cdk.DefaultStackSynthesizer.DEFAULT_LOOKUP_ROLE_ARN
+        s = s.replace(/\$\{AWS::AccountId}/g, stack.account)
+        s = s.replace(/\$\{AWS::Partition}/g, stack.partition)
+        s = s.replace(/\$\{AWS::Region}/g, stack.region)
+        s = s.replace(/\$\{Qualifier}/g, qualifier)
+        return s
+      } else {
+        throw new Error(`cdkToolkitLookupRoleArn only works with a DefaultStackSynthesizer and not ${synthesizer}`)
+      }
+    }
 
     const pipeline = new CodePipeline(this, 'Pipeline', {
       pipelineName: 'TestPipeline',
@@ -31,7 +49,19 @@ export class CiCdAwsPipelineDemo2Stack extends cdk.Stack {
           'npm run build', 
           'npx cdk synth'
         ]
-      })
+      }),
+
+      // Allow the CDK application to perform lookups of the environment during synthesis.
+      synthCodeBuildDefaults: {
+        rolePolicy: [
+          new iam.PolicyStatement({
+            actions: [ 'sts:AssumeRole' ],
+            resources: [ cdkToolkitLookupRoleArn(this) ],
+          }),
+        ],
+      },
+
+      
     });
 
 
