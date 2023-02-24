@@ -107,7 +107,7 @@ export class CiCdAwsPipelineDemo2Stack extends cdk.Stack {
     // Create the instance using the Security Group, AMI, and KeyPair defined in the VPC created
     const ec2Instance = new ec2.Instance(this, 'Instance', {
       vpc,
-      instanceType: ec2.InstanceType.of(ec2.InstanceClass.T4G, ec2.InstanceSize.MICRO),
+      instanceType: ec2.InstanceType.of(ec2.InstanceClass.T2, ec2.InstanceSize.MICRO),
       machineImage: ami,
       securityGroup: securityGroup,
       // keyName: key.keyPairName,
