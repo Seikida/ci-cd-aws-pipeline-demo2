@@ -7,7 +7,7 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as path from 'path';
 // import { KeyPair } from 'cdk-ec2-key-pair';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
-
+import { CodePipeline, CodePipelineSource, ShellStep, Step } from 'aws-cdk-lib/pipelines';
 
 export class CiCdAwsPipelineDemo2Stack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -22,7 +22,20 @@ export class CiCdAwsPipelineDemo2Stack extends cdk.Stack {
 
 
 
+    const pipeline = new CodePipeline(this, 'Pipeline', {
+      pipelineName: 'TestPipeline',
+      synth: new ShellStep('Synth', {
+        input: CodePipelineSource.gitHub('Seikida/ci-cd-aws-pipeline-demo2', 'main'), //Remember to change 
+        commands: [
+          'npm ci', 
+          'npm run build', 
+          'npx cdk synth'
+        ]
+      })
+    });
 
+
+    /*
     // Create a Key Pair to be used with this EC2 Instance
     // Temporarily disabled since `cdk-ec2-key-pair` is not yet CDK v2 compatible
     // const key = new KeyPair(this, 'KeyPair', {
@@ -90,6 +103,7 @@ export class CiCdAwsPipelineDemo2Stack extends cdk.Stack {
     // new cdk.CfnOutput(this, 'Key Name', { value: key.keyPairName })
     new cdk.CfnOutput(this, 'Download Key Command', { value: 'aws secretsmanager get-secret-value --secret-id ec2-ssh-key/cdk-keypair/private --query SecretString --output text > cdk-key.pem && chmod 400 cdk-key.pem' })
     new cdk.CfnOutput(this, 'ssh command', { value: 'ssh -i cdk-key.pem -o IdentitiesOnly=yes ec2-user@' + ec2Instance.instancePublicIp })
+    */
 
   }
 }
