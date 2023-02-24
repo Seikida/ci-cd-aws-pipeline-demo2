@@ -61,7 +61,7 @@ export class CiCdAwsPipelineDemo2Stack extends cdk.Stack {
         ],
       },
 
-      
+
     });
 
 
@@ -83,7 +83,6 @@ export class CiCdAwsPipelineDemo2Stack extends cdk.Stack {
       }]
     });
 
-    /*
 
     // Allow SSH (TCP Port 22) access from anywhere
     const securityGroup = new ec2.SecurityGroup(this, 'SecurityGroup', {
@@ -133,7 +132,7 @@ export class CiCdAwsPipelineDemo2Stack extends cdk.Stack {
     // new cdk.CfnOutput(this, 'Key Name', { value: key.keyPairName })
     new cdk.CfnOutput(this, 'Download Key Command', { value: 'aws secretsmanager get-secret-value --secret-id ec2-ssh-key/cdk-keypair/private --query SecretString --output text > cdk-key.pem && chmod 400 cdk-key.pem' })
     new cdk.CfnOutput(this, 'ssh command', { value: 'ssh -i cdk-key.pem -o IdentitiesOnly=yes ec2-user@' + ec2Instance.instancePublicIp })
-    */
+    
 
   }
 }
