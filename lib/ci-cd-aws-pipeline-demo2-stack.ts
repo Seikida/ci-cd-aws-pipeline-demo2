@@ -64,6 +64,8 @@ export class CiCdAwsPipelineDemo2Stack extends cdk.Stack {
 
     });
 
+    // Next...
+
 
     // Create a Key Pair to be used with this EC2 Instance
     // Temporarily disabled since `cdk-ec2-key-pair` is not yet CDK v2 compatible
@@ -159,6 +161,7 @@ export class CiCdAwsPipelineDemo2Stack extends cdk.Stack {
     });
 
     // Create an asset that will be used as part of User Data to run on first load
+    // https://docs.aws.amazon.com/cdk/v2/guide/assets.html
     const asset = new Asset(this, 'Asset', { path: path.join(__dirname, '../src/config.sh') });
     const localPath = ec2Instance.userData.addS3DownloadCommand({
       bucket: asset.bucket,
